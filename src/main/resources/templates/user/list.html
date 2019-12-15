@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>梦学谷账单管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/public.css}"  href="../css/public.css"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"  href="../css/style.css"/>
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: #header">
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: #timeSection">
+</section>
+<!--主体内容-->
+    <section class="publicMian ">
+        <div class="left" th:replace="main/public :: #left(activeFlag = 'user')">
+        </div>
+        <div class="right">
+            <div class="location">
+                <strong>你现在所在的位置是:</strong>
+                <span>用户管理页面</span>
+            </div>
+            <form id="Form" th:action="@{/users}">
+                <div class="search">
+                    <span>用户名：</span>
+                    <input th:value="${username}" name="username" type="text" placeholder="请输入用户名"/>
+                    <input onclick="$('#Form').submit()" type="button" value="查询"/>
+                    <a th:href="@{/user}" href="add.html">添加用户</a>
+                </div>
+            </form>
+            <!--用户-->
+            <table class="providerTable" cellpadding="0" cellspacing="0">
+                <tr class="firstTr">
+                    <th width="10%">用户名</th>
+                    <th width="20%">真实姓名</th>
+                    <th width="10%">性别</th>
+                    <th width="10%">出生日期</th>
+                    <th width="10%">用户类型</th>
+                    <th width="30%">操作</th>
+                </tr>
+                <tr th:each="user:${users}">
+                    <td th:text="${user.username}">hanlu</td>
+                    <td th:text="${user.realName}">韩露</td>
+                    <td th:text="${user.gender == 1 ? '女' : '男'}">女</td>
+                    <td th:text="${#dates.format(user.birthday, 'yyyy-MM-dd HH:mm:ss')}">1989/10/10</td>
+                    <td th:text="${user.userType == 1 ? '管理员' : (user.userType == 2 ? '经理' : '普通用户')}">经理</td>
+                    <td>
+                        <a href="view.html" th:href="@{/user/}+${user.id}"><img th:src="@{/img/read.png}" src="../img/read.png" alt="查看" title="查看"/></a>
+                        <a href="update.html" th:href="@{/user/}+${user.id}+'?type=update'"><img th:src="@{/img/xiugai.png}" src="../img/xiugai.png" alt="修改" title="修改"/></a>
+                        <a href="#" th:del_uri="@{/deleteUser/}+${user.id}" class="delete" ><img th:src="@{/img/schu.png}" src="../img/schu.png" alt="删除" title="删除"/></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+
+	<!--点击删除按钮后弹出的页面-->
+	<div class="zhezhao"></div>
+	<form method="post" id="deleteForm">
+		<input type="hidden" name="_method" value="delete">
+		<div class="remove" id="removeProv">
+		   <div class="removerChid">
+			   <h2>提示</h2>
+			   <div class="removeMain" >
+				   <p>你确定要删除吗？</p>
+				   <a href="#" id="yes">确定</a>
+				   <a href="#" id="no">取消</a>
+			   </div>
+		   </div>
+		</div>
+	</form>
+
+<footer class="footer"><div style="text-align:center;">	<p><a href="http://www.mengxuegu.com/" target="_blank">梦学谷 www.mengxuegu.com</a> 版权所有</p></div></footer>
+
+<script th:src="@{/js/jquery.js}" th src="../js/jquery.js"></script>
+<script th:src="@{/js/js.js}" src="../js/js.js"></script>
+<!--
+	<script src="js/time.js"></script>
+	-->
+</body>
+</html>

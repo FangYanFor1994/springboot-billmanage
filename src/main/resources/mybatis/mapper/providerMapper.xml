@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fy.billmanagement.mapper.ProviderMapper">
+
+    <select id="getProviders" resultType="com.fy.billmanagement.entities.Provider">
+        select * from provider where 1=1
+        <if test="providerName != null and providerName != ''">
+            and providerName like '%${providerName}%'
+        </if>
+    </select>
+
+    <select id="getProviderByPid" resultType="com.fy.billmanagement.entities.Provider">
+        select * from provider where pid = #{pid}
+    </select>
+
+    <insert id="addProvider">
+        insert into provider (provider_code, providerName, people, phone, address, fax, `describe`, create_date)
+        values (#{providerCode}, #{providerName}, #{people},  #{phone}, #{address}, #{fax}, #{describe}, now())
+    </insert>
+
+    <update id="updateProvider" parameterType="com.fy.billmanagement.entities.Provider">
+        update provider
+        set
+           provider_code=#{providerCode},
+           providerName=#{providerName},
+        `people`=#{people},
+        `address`=#{address},
+        `fax`=#{fax},
+        `describe`=#{describe},
+        `create_date`=NOW()
+        where
+        pid=#{pid}
+    </update>
+
+    <delete id="deleteProviderByPid">
+        delete from provider where pid = ${pid}
+    </delete>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fy.billmanagement.mapper.UserMapper">
+    <select id="getUsers" resultType="com.fy.billmanagement.entities.User">
+        select * from user where 1=1
+        <if test="username != null and username != ''">
+            and username like '%${username}%'
+        </if>
+    </select>
+
+    <insert id="addUser">
+        INSERT INTO `user` (
+            `username`,
+            `real_name`,
+            `password`,
+            `gender`,
+            `birthday`,
+            `user_type`
+        )
+        VALUES
+            (
+                #{username},
+                #{realName},
+                #{password},
+                #{gender},
+                #{birthday},
+                #{userType}
+            );
+    </insert>
+
+    <select id="getUserById" resultType="com.fy.billmanagement.entities.User">
+        select * from user where id=#{id}
+    </select>
+
+    <update id="updateUserById">
+        UPDATE `user`
+        SET
+         `real_name` = #{realName},
+         `gender` = #{gender},
+         `birthday` = #{birthday},
+         `user_type` = #{userType}
+         <if test="password!=null and password!=''">
+             ,password = #{password}
+         </if>
+        WHERE
+            (`id` = #{id});
+    </update>
+
+    <delete id="deleteUserById">
+        delete from  user where id=#{id}
+    </delete>
+
+    <select id="checkUserByUsername" resultType="com.fy.billmanagement.entities.User">
+        select * from user where username=#{username}
+    </select>
+</mapper>

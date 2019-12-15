@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fy.billmanagement.mapper.BillMapper">
+    <!--查询账单-->
+      <select id="getBillProvider"  resultType="com.fy.billmanagement.entities.BillProvider">
+        select b.*,p.providerName from bill b left join provider p on b.pid=p.pid
+          where 1=1
+        <if test="bid != null and bid != ''">
+            and bid = #{bid}
+        </if>
+        <if test="billName != null and billName != ''">
+            and bill_name like '%${billName}%'
+        </if>
+        <if test="pid != null and pid != ''">
+            and  b.pid = #{pid}
+        </if>
+        <if test="pay != null and pid !=''">
+            and pay = #{pay}
+        </if>
+      </select>
+    <!--新增账单-->
+    <insert id="addBill">
+        INSERT INTO `bill` (
+	`bid`,
+	`bill_code`,
+	`bill_name`,
+	`bill_com`,
+	`bill_num`,
+	`money`,
+	`pay`,
+	`pid`,
+	`create_date`
+)
+VALUES
+	(
+		#{bid},
+		#{billCode},
+		#{billName},
+		#{billCom},
+		#{billNum},
+		#{money},
+		#{pay},
+		#{pid},
+		now()
+	);
+
+    </insert>
+
+    <!--根据bid查询bill-->
+    <select id="getBillProviderByBid" resultType="com.fy.billmanagement.entities.BillProvider">
+        select b.*,p.providerName from bill b left join provider p on p.pid=b.pid
+        where bid=#{bid}
+    </select>
+
+    <update id="updateBill">
+        UPDATE `bill`
+        SET `bill_code` = #{billCode},
+         `bill_name` =#{billName},
+         `bill_com` = #{billCom},
+         `bill_num` = #{billNum},
+         `money` = #{money},
+         `pay` = #{pay},
+         `pid` = #{pid},
+         `create_date` = now()
+        WHERE
+            (`bid` = #{bid});
+    </update>
+
+    <delete id="delateBill">
+        delete from bill where bid=#{bid}
+    </delete>
+</mapper>
